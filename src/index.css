@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: auto; }
+  body {
+    @apply bg-cream font-sans text-brown antialiased;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4 { @apply font-serif; }
+  :focus-visible { outline: 2px solid #DDA44C; outline-offset: 3px; }
+}
+
+@layer components {
+  /* subtle paper texture — pure CSS, no SVG */
+  .paper {
+    background-color: #F5EBD7;
+    background-image:
+      radial-gradient(rgba(142,48,40,.045) 1px, transparent 1px),
+      radial-gradient(rgba(41,35,30,.035) 1px, transparent 1px);
+    background-size: 22px 22px, 37px 37px;
+    background-position: 0 0, 11px 17px;
+  }
+  .container-x { @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10; }
+  .torn-edge {
+    height: 44px;
+    clip-path: polygon(0 62%,4% 40%,9% 58%,14% 36%,20% 55%,26% 38%,33% 60%,40% 42%,47% 58%,54% 36%,61% 56%,68% 40%,75% 60%,82% 38%,89% 56%,95% 40%,100% 58%,100% 100%,0 100%);
+  }
+  .gold-line { @apply flex items-center justify-center gap-3; }
+  .gold-line::before, .gold-line::after { content: ''; @apply h-px w-14 bg-gold/70; }
+  .gold-line > span { @apply block h-2 w-2 rotate-45 bg-gold; }
+  .ornate-border { box-shadow: inset 0 0 0 1px rgba(221,164,76,.7), inset 0 0 0 5px #F5EBD7, inset 0 0 0 6px rgba(221,164,76,.45); }
+  .btn-gold { @apply inline-flex items-center justify-center gap-2 rounded-sm bg-gold px-6 py-3 text-sm font-medium text-maroon shadow-card transition-colors hover:bg-gold-light; }
+  .btn-outline { @apply inline-flex items-center justify-center gap-2 rounded-sm border border-gold/80 px-6 py-3 text-sm font-medium text-gold transition-colors hover:bg-gold/10; }
+  .btn-maroon { @apply inline-flex items-center justify-center gap-2 rounded-sm bg-maroon px-6 py-3 text-sm font-medium text-cream shadow-card transition-colors hover:bg-brick; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
