@@ -8,7 +8,7 @@ import { site } from '../data/site.js';
 export default function Reservation() {
   return (
     <>
-      <PageHero title="Reservation" nepali="बुकिङ गर्नुहोस्" image={images.reservation} />
+      <PageHero title="Reservation" nepali="बुकिङ गर्नुहोस्" image={images.reservationHero} />
       <section className="paper py-14 sm:py-20">
         <div className="container-x grid gap-10 lg:grid-cols-2 lg:gap-14">
           <div>

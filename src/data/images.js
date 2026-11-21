@@ -17,6 +17,7 @@ export const images = {
   },
   newari: p('menu-newari'),
   reservation: p('reservation-table'),
+  reservationHero: p('reservation-hero'),
   contact: p('contact-mountains'),
   mountain: p('mountain-decoration'),
   pattern: p('nepali-pattern'),

@@ -1,6 +1,9 @@
 import { MapPin, Phone, Mail, Facebook, Instagram, Youtube, MessageCircle, Clock } from 'lucide-react';
 import { site } from '../data/site.js';
 
+const MAP_EMBED_URL =
+  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d904211.20142497!2d84.74696737689733!3d27.714970349231788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ebb365128209fb%3A0x3110f6aa2c4eb2fc!2z4KSq4KWH4KSq4KWN4KSf4KS-IOCkl-CkvuCkieCkgSwgUGVwdGEgVmlsbGFnZQ!5e0!3m2!1sen!2snp!4v1795256747729!5m2!1sen!2snp';
+
 export function GetInTouch() {
   const items = [
     { Icon: MapPin, text: site.address, href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.address)}`, ext: true },
@@ -42,18 +45,17 @@ export function OpeningHours() {
 export function MapBlock() {
   return (
     <div data-reveal className="overflow-hidden rounded-sm border border-gold/60 shadow-card">
-      {site.mapEmbedUrl ? (
-        <iframe title="Bhansa Ghar location" src={site.mapEmbedUrl} loading="lazy" className="h-72 w-full border-0" referrerPolicy="no-referrer-when-downgrade" />
-      ) : (
-        <div className="flex h-72 flex-col items-center justify-center gap-2 bg-cream-dark p-4 text-center">
-          <MapPin className="text-brick" size={32} />
-          <p className="font-serif text-lg text-maroon">Bhansa Ghar</p>
-          <p className="text-xs text-brown/70">{site.address}</p>
-          <a className="btn-maroon mt-2 !py-2 text-xs" target="_blank" rel="noopener noreferrer"
-            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.address)}`}>Open in Google Maps</a>
-          <p className="mt-1 text-[10px] text-brown/50">Set site.mapEmbedUrl in src/data/site.js to embed a live map.</p>
-        </div>
-      )}
+      <iframe
+        title="Bhansa Ghar location"
+        src={site.mapEmbedUrl || MAP_EMBED_URL}
+        width="600"
+        height="450"
+        loading="lazy"
+        allowFullScreen
+        className="h-72 w-full border-0"
+        style={{ border: 0 }}
+        referrerPolicy="strict-origin-when-cross-origin"
+      />
     </div>
   );
 }
