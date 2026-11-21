@@ -1,10 +1,10 @@
-// src/data/images.js
+
 const p = (name) => `/images/${name}.png`;
 
 export const images = {
   logo: p('logo'),
-  hero: { restaurant: '/images/Hero.png', food: p('hero-food') },
-  story: { interior: p('story-interior'), temple: p('heritage-temple') },
+  hero: { restaurant: '/images/Hero.png', food: '/images/hero-food.png' },
+  story: { interior: '/images/Hero.png', temple: p('heritage-temple') },
   menu: {
     thali: p('menu-thali'),
     momo: p('menu-momo'),

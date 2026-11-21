@@ -23,33 +23,99 @@ export default function Home() {
   const { lang } = useLang();
   return (
     <>
-      {/* Hero */}
+          {/* Hero */}
       <section className="relative overflow-hidden bg-brown">
+        {/* background: restaurant building + mountains */}
         <div className="absolute inset-0" aria-hidden="true">
-          <SmartImage src={images.hero.restaurant} alt="" className="h-full w-full" data-parallax eager />
+          <SmartImage src={images.hero.restaurant} alt="" className="h-full w-full" position="70% center" eager />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-brown/90 via-maroon/60 to-brown/30" />
-        <div className="container-x relative z-10 grid min-h-[560px] items-center gap-8 pb-24 pt-12 lg:grid-cols-2 lg:min-h-[640px]">
-          <div>
-            <h1 data-hero-title className="font-deva text-4xl font-semibold leading-tight text-cream sm:text-5xl lg:text-6xl">
+
+        {/* dark fade: left dark for text, building visible on right */}
+        <div className="absolute inset-0 bg-gradient-to-r from-brown/90 via-brown/45 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-brown/70 via-transparent to-brown/30" />
+
+        {/* thali plate: smaller, bottom right, soft edges, cut by the curve */}
+        <div
+          className="pointer-events-none absolute -bottom-10 right-0 z-[5] hidden aspect-[4/3] w-[40%] max-w-[600px] md:block lg:right-[2%]"
+          aria-hidden="true"
+        >
+          <SmartImage
+            src={images.hero.food}
+            alt="Traditional Nepali thali"
+            className="h-full w-full"
+            imgClassName="!object-contain !object-center drop-shadow-[0_20px_30px_rgba(0,0,0,0.55)]"
+            style={{
+              WebkitMaskImage: 'radial-gradient(ellipse 48% 48% at 50% 50%, #000 66%, transparent 100%)',
+              maskImage: 'radial-gradient(ellipse 48% 48% at 50% 50%, #000 66%, transparent 100%)',
+            }}
+            eager
+          />
+        </div>
+
+        {/* top-left gold ornament */}
+        <SmartImage
+          src={images.pattern}
+          alt=""
+          fallback="none"
+          className="pointer-events-none absolute left-2 top-4 z-[6] h-28 w-44 opacity-80"
+          imgClassName="!object-contain !object-left-top"
+          data-float
+        />
+        {/* bottom-left gold ornament */}
+        <SmartImage
+          src={images.pattern}
+          alt=""
+          fallback="none"
+          className="pointer-events-none absolute bottom-10 left-0 z-[6] h-20 w-52 -scale-y-100 opacity-70"
+          imgClassName="!object-contain !object-left-top"
+        />
+
+        {/* content */}
+        <div className="container-x relative z-10 flex min-h-[520px] items-center pb-24 pt-10 lg:min-h-[580px]">
+          <div className="max-w-xl">
+            <h1 data-hero-title className="font-deva text-4xl font-semibold leading-[1.25] text-cream drop-shadow-lg sm:text-5xl lg:text-6xl">
               स्वादमा नेपालीपन,<br />आतिथ्यमा आफ्नोपन!
             </h1>
-            <p data-hero-title className="mt-5 font-serif text-2xl leading-snug text-gold sm:text-3xl">
+            <p data-hero-title className="mt-4 font-serif text-2xl font-semibold leading-snug text-gold drop-shadow sm:text-3xl lg:text-4xl">
               A Taste of Nepal,<br />A Feeling of Home.
             </p>
-            <p data-hero-title className="mt-4 max-w-md text-sm text-cream/90 sm:text-base">
-              Experience authentic Nepali cuisine with traditional recipes and warm hospitality.
+            <p data-hero-title className="mt-4 max-w-md text-sm leading-relaxed text-cream/95 sm:text-base">
+              Experience authentic Nepali cuisine<br className="hidden sm:block" /> with traditional recipes and warm hospitality.
             </p>
-            <div data-hero-title className="mt-7 flex flex-wrap gap-3">
+            <div data-hero-title className="mt-6 flex flex-wrap gap-3">
               <Button to="/menu">{lang === 'NP' ? 'मेनु हेर्नुहोस्' : 'Explore Our Menu'} <ArrowRight size={16} /></Button>
-              <Button to="/our-story" variant="outline">Our Story</Button>
+              <Button to="/our-story" variant="outline" className="bg-brown/40">Our Story</Button>
             </div>
-          </div>
-          <div data-img-reveal className="hidden lg:block">
-            <SmartImage src={images.hero.food} alt="Traditional Nepali food platter" className="aspect-[4/3] w-full rounded-sm border border-gold/60 shadow-lift" eager />
+            <div data-hero-title className="gold-line mt-7 max-w-[240px]"><span /></div>
           </div>
         </div>
-        <div className="torn-edge absolute -bottom-px left-0 right-0 bg-cream" aria-hidden="true" />
+
+        {/* soft torn-paper curve (rises on the right like the reference) */}
+        <svg
+          className="pointer-events-none absolute -bottom-px left-0 z-[7] block h-[80px] w-full sm:h-[110px]"
+          viewBox="0 0 1440 110"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0,62 C60,52 120,70 200,60 C280,50 340,66 430,58 C520,50 600,34 700,42 C800,50 880,64 980,58 C1080,52 1150,38 1240,46 C1320,53 1380,44 1440,40 L1440,110 L0,110 Z"
+            className="fill-cream"
+          />
+          <path
+            d="M0,62 C60,52 120,70 200,60 C280,50 340,66 430,58 C520,50 600,34 700,42 C800,50 880,64 980,58 C1080,52 1150,38 1240,46 C1320,53 1380,44 1440,40"
+            fill="none"
+            className="stroke-gold"
+            strokeOpacity="0.55"
+            strokeWidth="1.5"
+          />
+          <path
+            d="M0,66 C60,56 120,74 200,64 C280,54 340,70 430,62 C520,54 600,38 700,46 C800,54 880,68 980,62 C1080,56 1150,42 1240,50 C1320,57 1380,48 1440,44"
+            fill="none"
+            className="stroke-brown"
+            strokeOpacity="0.25"
+            strokeWidth="2"
+          />
+        </svg>
       </section>
 
       {/* Signature dishes */}
