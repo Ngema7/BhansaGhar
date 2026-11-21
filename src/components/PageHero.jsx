@@ -1,24 +1,43 @@
-import { Link } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import SmartImage from './SmartImage.jsx';
+import Button from './Button.jsx';
+import { images } from '../data/images.js';
 
-export default function PageHero({ title, nepali, image, crumb, position }) {
+export default function PageHero({ lang = 'EN' }) {
   return (
-    <section className="relative overflow-hidden bg-brown">
-      <div className="absolute inset-0" aria-hidden="true">
-        <SmartImage src={image} alt="" className="h-full w-full" imgClassName="" position={position} data-parallax eager />
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-b from-maroon/70 via-brown/55 to-maroon/80" />
-      <div className="container-x relative z-10 flex min-h-[260px] flex-col items-center justify-center pb-16 pt-12 text-center sm:min-h-[320px]">
-        <h1 data-hero-title className="text-4xl font-semibold text-cream drop-shadow sm:text-5xl lg:text-6xl">{title}</h1>
-        <p data-hero-title className="mt-2 font-deva text-2xl text-gold sm:text-3xl">{nepali}</p>
-        <nav aria-label="Breadcrumb" data-hero-title className="mt-4 flex items-center gap-2 text-xs text-cream/85">
-          <Link to="/" className="hover:text-gold">Home</Link>
-          <ChevronRight size={12} className="text-gold" />
-          <span>{crumb || title}</span>
-        </nav>
-      </div>
-      <div className="torn-edge absolute -bottom-px left-0 right-0 bg-cream" aria-hidden="true" />
-    </section>
+    <>
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-brown">
+        <div className="absolute inset-0" aria-hidden="true">
+          <SmartImage src={images.hero.restaurant} alt="" className="h-full w-full" position="70% center" eager />
+        </div>
+        {/* left-to-right dark fade so text stays readable, building stays visible on the right */}
+        <div className="absolute inset-0 bg-gradient-to-r from-brown/90 via-brown/55 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-brown/60 via-transparent to-brown/30" />
+
+        {/* corner ornaments (uses nepali-pattern.png, hidden if missing) */}
+        <SmartImage src={images.pattern} alt="" fallback="none" className="pointer-events-none absolute left-0 top-4 h-24 w-40 opacity-70" imgClassName="!object-contain !object-left-top" data-float />
+
+        <div className="container-x relative z-10 flex min-h-[560px] items-center pb-24 pt-12 lg:min-h-[640px]">
+          <div className="max-w-xl">
+            <h1 data-hero-title className="font-deva text-4xl font-semibold leading-[1.25] text-cream drop-shadow-lg sm:text-5xl lg:text-6xl">
+              स्वादमा नेपालीपन,<br />आतिथ्यमा आफ्नोपन!
+            </h1>
+            <p data-hero-title className="mt-5 font-serif text-2xl font-semibold leading-snug text-gold drop-shadow sm:text-3xl">
+              A Taste of Nepal,<br />A Feeling of Home.
+            </p>
+            <p data-hero-title className="mt-4 max-w-md text-sm leading-relaxed text-cream/95 sm:text-base">
+              Experience authentic Nepali cuisine<br className="hidden sm:block" /> with traditional recipes and warm hospitality.
+            </p>
+            <div data-hero-title className="mt-7 flex flex-wrap gap-3">
+              <Button to="/menu">{lang === 'NP' ? 'मेनु हेर्नुहोस्' : 'Explore Our Menu'} <ArrowRight size={16} /></Button>
+              <Button to="/our-story" variant="outline" className="bg-brown/40">Our Story</Button>
+            </div>
+            <div data-hero-title className="gold-line mt-8 max-w-[240px]"><span /></div>
+          </div>
+        </div>
+        <div className="torn-edge absolute -bottom-px left-0 right-0 bg-cream" aria-hidden="true" />
+      </section>
+    </>
   );
 }
