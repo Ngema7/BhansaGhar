@@ -11,6 +11,7 @@ import NotFound from './pages/NotFound.jsx';
 import AdminLogin from './admin/pages/AdminLogin.jsx';
 import AdminLayout from './admin/layouts/AdminLayout.jsx';
 import PlaceholderPage from './admin/pages/PlaceholderPage.jsx';
+import Dashboard from './admin/pages/Dashboard.jsx';
 import { ADMIN_BASE } from './admin/config.js';
 
 export default function App() {
@@ -24,7 +25,7 @@ export default function App() {
 
           {/* /bhansa-manage/... → Sidebar + Topbar भएका pages */}
           <Route element={<AdminLayout />}>
-            <Route path="dashboard" element={<PlaceholderPage title="Dashboard" />} />
+            <Route path="dashboard" element={<Dashboard />} />
             <Route path="menu" element={<PlaceholderPage title="Menu Management" />} />
             <Route path="categories" element={<PlaceholderPage title="Categories" />} />
             <Route path="gallery" element={<PlaceholderPage title="Gallery Management" />} />
