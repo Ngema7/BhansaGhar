@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { LangProvider } from './context/LangContext.jsx';
 import MainLayout from './layouts/MainLayout.jsx';
 import Home from './pages/Home.jsx';
@@ -9,15 +9,36 @@ import Reservation from './pages/Reservation.jsx';
 import Contact from './pages/Contact.jsx';
 import NotFound from './pages/NotFound.jsx';
 import AdminLogin from './admin/pages/AdminLogin.jsx';
+import AdminLayout from './admin/layouts/AdminLayout.jsx';
+import PlaceholderPage from './admin/pages/PlaceholderPage.jsx';
 import { ADMIN_BASE } from './admin/config.js';
 
 export default function App() {
   return (
     <LangProvider>
       <Routes>
-        {/* Admin: MainLayout बाहिर राखिएको छ, ताकि Navbar/Footer नदेखियोस् */}
-      <Route path={ADMIN_BASE} element={<AdminLogin />} />
+        {/* ===== Admin: MainLayout बाहिर, आफ्नै layout ===== */}
+        <Route path={ADMIN_BASE}>
+          {/* /bhansa-manage → Login */}
+          <Route index element={<AdminLogin />} />
 
+          {/* /bhansa-manage/... → Sidebar + Topbar भएका pages */}
+          <Route element={<AdminLayout />}>
+            <Route path="dashboard" element={<PlaceholderPage title="Dashboard" />} />
+            <Route path="menu" element={<PlaceholderPage title="Menu Management" />} />
+            <Route path="categories" element={<PlaceholderPage title="Categories" />} />
+            <Route path="gallery" element={<PlaceholderPage title="Gallery Management" />} />
+            <Route path="reservations" element={<PlaceholderPage title="Reservations" />} />
+            <Route path="messages" element={<PlaceholderPage title="Messages" />} />
+            <Route path="homepage" element={<PlaceholderPage title="Homepage Content" />} />
+            <Route path="settings" element={<PlaceholderPage title="Website Settings" />} />
+            <Route path="profile" element={<PlaceholderPage title="Admin Profile" />} />
+            {/* गलत admin URL लेखे Dashboard मा पठाउने */}
+            <Route path="*" element={<Navigate to="dashboard" replace />} />
+          </Route>
+        </Route>
+
+        {/* ===== Public website: पहिलेकै जस्तो ===== */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/our-story" element={<OurStory />} />
