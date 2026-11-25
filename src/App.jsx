@@ -20,6 +20,9 @@ import SupabaseCheck from './admin/pages/SupabaseCheck.jsx';
 import { AuthProvider } from './admin/context/AuthContext.jsx';
 import ProtectedRoute from './admin/components/ProtectedRoute.jsx';
 
+import Categories from './admin/pages/Categories.jsx';
+import { ToastProvider } from './admin/components/Toast.jsx';
+
 
 export default function App() {
   return (
@@ -28,11 +31,13 @@ export default function App() {
            {/* ===== Admin ===== */}
         <Route
           path={ADMIN_BASE}
-          element={
-            <AuthProvider>
-              <Outlet />
-            </AuthProvider>
-          }
+      element={
+  <AuthProvider>
+    <ToastProvider>
+      <Outlet />
+    </ToastProvider>
+  </AuthProvider>
+}
         >
           <Route index element={<AdminLogin />} />
           <Route path="check" element={<SupabaseCheck />} />
@@ -42,7 +47,7 @@ export default function App() {
             <Route element={<AdminLayout />}>
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="menu" element={<PlaceholderPage title="Menu Management" />} />
-              <Route path="categories" element={<PlaceholderPage title="Categories" />} />
+              <Route path="categories" element={<Categories />} />
               <Route path="gallery" element={<PlaceholderPage title="Gallery Management" />} />
               <Route path="reservations" element={<PlaceholderPage title="Reservations" />} />
               <Route path="messages" element={<PlaceholderPage title="Messages" />} />
@@ -60,7 +65,7 @@ export default function App() {
           <Route path="/our-story" element={<OurStory />} />
           <Route path="/menu" element={<Menu />} />
           <Route path="/gallery" element={<Gallery />} />
-          <Route path="/reservation" element={<Reservation />} />
+          <Route path="/reservation" element={<Reservation />} />             
           <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
         </Route>
