@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+
+import { Routes, Route, Navigate,Outlet } from 'react-router-dom';
 import { LangProvider } from './context/LangContext.jsx';
 import MainLayout from './layouts/MainLayout.jsx';
 import Home from './pages/Home.jsx';
@@ -14,28 +15,42 @@ import PlaceholderPage from './admin/pages/PlaceholderPage.jsx';
 import Dashboard from './admin/pages/Dashboard.jsx';
 import { ADMIN_BASE } from './admin/config.js';
 
+import SupabaseCheck from './admin/pages/SupabaseCheck.jsx';
+
+import { AuthProvider } from './admin/context/AuthContext.jsx';
+import ProtectedRoute from './admin/components/ProtectedRoute.jsx';
+
+
 export default function App() {
   return (
     <LangProvider>
       <Routes>
-        {/* ===== Admin: MainLayout बाहिर, आफ्नै layout ===== */}
-        <Route path={ADMIN_BASE}>
-          {/* /bhansa-manage → Login */}
+           {/* ===== Admin ===== */}
+        <Route
+          path={ADMIN_BASE}
+          element={
+            <AuthProvider>
+              <Outlet />
+            </AuthProvider>
+          }
+        >
           <Route index element={<AdminLogin />} />
+          <Route path="check" element={<SupabaseCheck />} />
 
-          {/* /bhansa-manage/... → Sidebar + Topbar भएका pages */}
-          <Route element={<AdminLayout />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="menu" element={<PlaceholderPage title="Menu Management" />} />
-            <Route path="categories" element={<PlaceholderPage title="Categories" />} />
-            <Route path="gallery" element={<PlaceholderPage title="Gallery Management" />} />
-            <Route path="reservations" element={<PlaceholderPage title="Reservations" />} />
-            <Route path="messages" element={<PlaceholderPage title="Messages" />} />
-            <Route path="homepage" element={<PlaceholderPage title="Homepage Content" />} />
-            <Route path="settings" element={<PlaceholderPage title="Website Settings" />} />
-            <Route path="profile" element={<PlaceholderPage title="Admin Profile" />} />
-            {/* गलत admin URL लेखे Dashboard मा पठाउने */}
-            <Route path="*" element={<Navigate to="dashboard" replace />} />
+          {/* ProtectedRoute: login र admin नभए भित्र छिर्न नदिने */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<AdminLayout />}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="menu" element={<PlaceholderPage title="Menu Management" />} />
+              <Route path="categories" element={<PlaceholderPage title="Categories" />} />
+              <Route path="gallery" element={<PlaceholderPage title="Gallery Management" />} />
+              <Route path="reservations" element={<PlaceholderPage title="Reservations" />} />
+              <Route path="messages" element={<PlaceholderPage title="Messages" />} />
+              <Route path="homepage" element={<PlaceholderPage title="Homepage Content" />} />
+              <Route path="settings" element={<PlaceholderPage title="Website Settings" />} />
+              <Route path="profile" element={<PlaceholderPage title="Admin Profile" />} />
+              <Route path="*" element={<Navigate to="dashboard" replace />} />
+            </Route>
           </Route>
         </Route>
 

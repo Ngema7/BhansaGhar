@@ -1,7 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Lock, Mail, AlertCircle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext.jsx';
+import { ADMIN_BASE } from '../config.js';
+
 
 export default function AdminLogin() {
+    const { signIn, session, isAdmin, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
+
+  // पहिले नै login भएको admin लाई सिधै dashboard मा पठाउने
+  useEffect(() => {
+    if (!authLoading && session && isAdmin) {
+      navigate(`${ADMIN_BASE}/dashboard`, { replace: true });
+    }
+  }, [authLoading, session, isAdmin, navigate]);
   // useState = React को "याद राख्ने बट्टा"।
   // हरेक बट्टामा [मान, मान बदल्ने function] हुन्छ।
   const [email, setEmail] = useState('');
@@ -29,23 +42,22 @@ export default function AdminLogin() {
     return newErrors;
   }
 
-  function handleSubmit(e) {
-    e.preventDefault(); // page reload हुन नदिने
+   async function handleSubmit(e) {
+    e.preventDefault();
 
     const newErrors = validate();
     setErrors(newErrors);
-
-    // कुनै error छ भने यहीँ रोकिने
     if (Object.keys(newErrors).length > 0) return;
 
-    // अहिलेको लागि नक्कली loading (Step 5 मा असली backend जोड्छौं)
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setErrors({
-        form: 'Login is not connected yet. The backend will be added in Step 5.',
-      });
-    }, 1000);
+    const { error } = await signIn(email.trim(), password);
+    setLoading(false);
+
+    if (error) {
+      setErrors({ form: error });
+      return;
+    }
+    navigate(`${ADMIN_BASE}/dashboard`, { replace: true });
   }
 
   return (

@@ -3,14 +3,17 @@ import { LogOut, X } from 'lucide-react';
 import { NAV_ITEMS } from '../navItems.js';
 import { ADMIN_BASE } from '../config.js';
 
+import { useAuth } from '../context/AuthContext.jsx';
+
 // props: open = फोनमा sidebar खुला छ कि छैन, onClose = बन्द गर्ने function
 export default function Sidebar({ open, onClose }) {
   const navigate = useNavigate();
+    const { signOut } = useAuth();
 
-  function handleLogout() {
+  async function handleLogout() {
     onClose();
-    // अहिलेको लागि Login page मा फर्कने मात्र। असली logout Step 5 मा।
-    navigate(ADMIN_BASE);
+    await signOut();
+    navigate(ADMIN_BASE, { replace: true });
   }
 
   return (
