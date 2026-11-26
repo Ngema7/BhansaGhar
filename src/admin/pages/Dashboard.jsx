@@ -8,7 +8,7 @@ import {
   Plus,
   Images,
   Settings,
-  MessageSquare,
+   FileText,
   ArrowRight,
   Info,
 } from 'lucide-react';
@@ -23,7 +23,7 @@ const QUICK_ACTIONS = [
   { label: 'Add New Dish', to: `${ADMIN_BASE}/menu`, icon: Plus },
   { label: 'Upload Gallery', to: `${ADMIN_BASE}/gallery`, icon: Images },
   { label: 'View Reservations', to: `${ADMIN_BASE}/reservations`, icon: CalendarDays },
-  { label: 'View Messages', to: `${ADMIN_BASE}/messages`, icon: MessageSquare },
+  { label: 'Edit Homepage', to: `${ADMIN_BASE}/homepage`, icon: FileText },
 ];
 
 const label = (s) => s.charAt(0).toUpperCase() + s.slice(1);

@@ -53,7 +53,7 @@ export default function App() {
               <Route path="categories" element={<Categories />} />
               <Route path="gallery" element={<PlaceholderPage title="Gallery Management" />} />
           <Route path="reservations" element={<Reservations />} />
-              <Route path="messages" element={<PlaceholderPage title="Messages" />} />
+             
               <Route path="homepage" element={<PlaceholderPage title="Homepage Content" />} />
               <Route path="settings" element={<PlaceholderPage title="Website Settings" />} />
               <Route path="profile" element={<PlaceholderPage title="Admin Profile" />} />
