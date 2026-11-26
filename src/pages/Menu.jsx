@@ -1,11 +1,8 @@
 import { useMemo, useRef, useState } from 'react';
-import { Download } from 'lucide-react';
 import PageHero from '../components/PageHero.jsx';
 import FoodCard from '../components/FoodCard.jsx';
-import Button from '../components/Button.jsx';
 import { images } from '../data/images.js';
 import { useMenu } from '../hooks/useMenu.js';
-import { downloadMenu } from '../utils.js';
 import { gsap, useGSAP, prefersReducedMotion } from '../animations/gsapConfig.js';
 
 export default function Menu() {
@@ -37,9 +34,7 @@ export default function Menu() {
           <div ref={grid} aria-live="polite" className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
             {items.map((m) => <FoodCard key={m.id} name={m.name} desc={m.desc} image={m.image} price={m.price} />)}
           </div>
-          <div className="mt-12 text-center">
-            <Button variant="maroon" type="button" onClick={downloadMenu}><Download size={16} /> Download Full Menu</Button>
-          </div>
+       
         </div>
       </section>
     </>

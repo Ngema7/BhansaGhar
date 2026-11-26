@@ -3,17 +3,21 @@ import { Facebook, Instagram, Youtube, MapPin, Phone, Mail, Clock } from 'lucide
 import Logo from './Logo.jsx';
 import SmartImage from './SmartImage.jsx';
 import { images } from '../data/images.js';
-import { navLinks, site } from '../data/site.js';
+import { navLinks } from '../data/site.js';
+import { useSite } from '../context/SiteContext.jsx';
 import { useLang } from '../context/LangContext.jsx';
 
-const socials = [
-  { Icon: Facebook, href: site.social.facebook, label: 'Facebook' },
-  { Icon: Instagram, href: site.social.instagram, label: 'Instagram' },
-  { Icon: Youtube, href: site.social.youtube, label: 'YouTube' },
-];
+
 
 export default function Footer() {
   const { lang } = useLang();
+    const site = useSite();
+  // खाली लिङ्क भएको social आइकन देखाउँदैनौं
+  const socials = [
+    { Icon: Facebook, href: site.social.facebook, label: 'Facebook' },
+    { Icon: Instagram, href: site.social.instagram, label: 'Instagram' },
+    { Icon: Youtube, href: site.social.youtube, label: 'YouTube' },
+  ].filter((s) => s.href);
   return (
     <footer className="relative overflow-hidden bg-maroon text-cream">
       <SmartImage src={images.mountain} alt="" fallback="none" className="pointer-events-none absolute bottom-0 right-0 h-40 w-full max-w-xl opacity-60" imgClassName="!object-contain !object-right-bottom" />

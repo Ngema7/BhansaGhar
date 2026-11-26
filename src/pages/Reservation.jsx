@@ -3,9 +3,10 @@ import PageHero from '../components/PageHero.jsx';
 import ReservationForm from '../components/ReservationForm.jsx';
 import SmartImage from '../components/SmartImage.jsx';
 import { images } from '../data/images.js';
-import { site } from '../data/site.js';
+import { useSite } from '../context/SiteContext.jsx';
 
 export default function Reservation() {
+    const site = useSite();
   return (
     <>
       <PageHero title="Reservation" nepali="बुकिङ गर्नुहोस्" image={images.reservationHero} />

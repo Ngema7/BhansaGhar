@@ -15,6 +15,8 @@ import PlaceholderPage from './admin/pages/PlaceholderPage.jsx';
 import Dashboard from './admin/pages/Dashboard.jsx';
 import { ADMIN_BASE } from './admin/config.js';
 
+import { SiteProvider } from './context/SiteContext.jsx';
+import WebsiteSettings from './admin/pages/WebsiteSettings.jsx';
 import SupabaseCheck from './admin/pages/SupabaseCheck.jsx';
 import Reservations from './admin/pages/Reservations.jsx';
 
@@ -30,6 +32,7 @@ import { ToastProvider } from './admin/components/Toast.jsx';
 export default function App() {
   return (
     <LangProvider>
+      <SiteProvider>
       <Routes>
            {/* ===== Admin ===== */}
         <Route
@@ -55,7 +58,7 @@ export default function App() {
           <Route path="reservations" element={<Reservations />} />
              
               <Route path="homepage" element={<PlaceholderPage title="Homepage Content" />} />
-              <Route path="settings" element={<PlaceholderPage title="Website Settings" />} />
+             <Route path="settings" element={<WebsiteSettings />} />
               <Route path="profile" element={<PlaceholderPage title="Admin Profile" />} />
               <Route path="*" element={<Navigate to="dashboard" replace />} />
             </Route>
@@ -73,6 +76,7 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
+      </SiteProvider>
     </LangProvider>
   );
 }
