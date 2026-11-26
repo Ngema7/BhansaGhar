@@ -11,13 +11,13 @@ import Contact from './pages/Contact.jsx';
 import NotFound from './pages/NotFound.jsx';
 import AdminLogin from './admin/pages/AdminLogin.jsx';
 import AdminLayout from './admin/layouts/AdminLayout.jsx';
-import PlaceholderPage from './admin/pages/PlaceholderPage.jsx';
+
 import Dashboard from './admin/pages/Dashboard.jsx';
 import { ADMIN_BASE } from './admin/config.js';
 import HomepageContent from './admin/pages/HomepageContent.jsx';
 import { SiteProvider } from './context/SiteContext.jsx';
 import WebsiteSettings from './admin/pages/WebsiteSettings.jsx';
-import SupabaseCheck from './admin/pages/SupabaseCheck.jsx';
+
 import Reservations from './admin/pages/Reservations.jsx';
 
 import { AuthProvider } from './admin/context/AuthContext.jsx';
@@ -48,7 +48,7 @@ export default function App() {
 }
         >
           <Route index element={<AdminLogin />} />
-          <Route path="check" element={<SupabaseCheck />} />
+         
 
           {/* ProtectedRoute: login र admin नभए भित्र छिर्न नदिने */}
           <Route element={<ProtectedRoute />}>
