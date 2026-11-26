@@ -29,7 +29,7 @@ import Categories from './admin/pages/Categories.jsx';
 import { ToastProvider } from './admin/components/Toast.jsx';
 import GalleryManagement from './admin/pages/GalleryManagement.jsx';
 
-
+import AdminProfile from './admin/pages/AdminProfile.jsx';
 
 export default function App() {
   return (
@@ -61,7 +61,7 @@ export default function App() {
              
             <Route path="homepage" element={<HomepageContent />} />
              <Route path="settings" element={<WebsiteSettings />} />
-              <Route path="profile" element={<PlaceholderPage title="Admin Profile" />} />
+            <Route path="profile" element={<AdminProfile />} />
               <Route path="*" element={<Navigate to="dashboard" replace />} />
             </Route>
           </Route>
