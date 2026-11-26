@@ -4,14 +4,15 @@ import PageHero from '../components/PageHero.jsx';
 import GalleryGrid from '../components/GalleryGrid.jsx';
 import Button from '../components/Button.jsx';
 import { images } from '../data/images.js';
-import { galleryItems, galleryCategories } from '../data/galleryData.js';
+import { useGallery } from '../hooks/useGallery.js';
 
 const PAGE = 8;
 
 export default function Gallery() {
+    const { items: galleryItems, categories: galleryCategories } = useGallery();
   const [category, setCategory] = useState('All');
   const [visible, setVisible] = useState(PAGE);
-  const filtered = useMemo(() => (category === 'All' ? galleryItems : galleryItems.filter((g) => g.category === category)), [category]);
+  const filtered = useMemo(() => (category === 'All' ? galleryItems : galleryItems.filter((g) => g.category === category)), [category, galleryItems]);
   const shown = filtered.slice(0, visible);
 
   return (
