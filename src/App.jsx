@@ -14,7 +14,7 @@ import AdminLayout from './admin/layouts/AdminLayout.jsx';
 import PlaceholderPage from './admin/pages/PlaceholderPage.jsx';
 import Dashboard from './admin/pages/Dashboard.jsx';
 import { ADMIN_BASE } from './admin/config.js';
-
+import HomepageContent from './admin/pages/HomepageContent.jsx';
 import { SiteProvider } from './context/SiteContext.jsx';
 import WebsiteSettings from './admin/pages/WebsiteSettings.jsx';
 import SupabaseCheck from './admin/pages/SupabaseCheck.jsx';
@@ -59,7 +59,7 @@ export default function App() {
            <Route path="gallery" element={<GalleryManagement />} />
           <Route path="reservations" element={<Reservations />} />
              
-              <Route path="homepage" element={<PlaceholderPage title="Homepage Content" />} />
+            <Route path="homepage" element={<HomepageContent />} />
              <Route path="settings" element={<WebsiteSettings />} />
               <Route path="profile" element={<PlaceholderPage title="Admin Profile" />} />
               <Route path="*" element={<Navigate to="dashboard" replace />} />
