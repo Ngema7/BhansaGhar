@@ -27,6 +27,8 @@ import MenuManagement from './admin/pages/MenuManagement.jsx';
 
 import Categories from './admin/pages/Categories.jsx';
 import { ToastProvider } from './admin/components/Toast.jsx';
+import GalleryManagement from './admin/pages/GalleryManagement.jsx';
+
 
 
 export default function App() {
@@ -54,7 +56,7 @@ export default function App() {
               <Route path="dashboard" element={<Dashboard />} />
            <Route path="menu" element={<MenuManagement />} />
               <Route path="categories" element={<Categories />} />
-              <Route path="gallery" element={<PlaceholderPage title="Gallery Management" />} />
+           <Route path="gallery" element={<GalleryManagement />} />
           <Route path="reservations" element={<Reservations />} />
              
               <Route path="homepage" element={<PlaceholderPage title="Homepage Content" />} />
