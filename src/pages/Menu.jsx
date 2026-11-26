@@ -4,14 +4,18 @@ import PageHero from '../components/PageHero.jsx';
 import FoodCard from '../components/FoodCard.jsx';
 import Button from '../components/Button.jsx';
 import { images } from '../data/images.js';
-import { menuItems, menuCategories } from '../data/menuData.js';
+import { useMenu } from '../hooks/useMenu.js';
 import { downloadMenu } from '../utils.js';
 import { gsap, useGSAP, prefersReducedMotion } from '../animations/gsapConfig.js';
 
 export default function Menu() {
+    const { items: menuItems, categories: menuCategories } = useMenu();
   const [category, setCategory] = useState('All');
   const grid = useRef(null);
-  const items = useMemo(() => (category === 'All' ? menuItems : menuItems.filter((m) => m.category === category)), [category]);
+    const items = useMemo(
+    () => (category === 'All' ? menuItems : menuItems.filter((m) => m.category === category)),
+    [category, menuItems]
+  );
 
   useGSAP(() => {
     if (prefersReducedMotion() || !grid.current) return;
