@@ -16,6 +16,7 @@ import Dashboard from './admin/pages/Dashboard.jsx';
 import { ADMIN_BASE } from './admin/config.js';
 
 import SupabaseCheck from './admin/pages/SupabaseCheck.jsx';
+import Reservations from './admin/pages/Reservations.jsx';
 
 import { AuthProvider } from './admin/context/AuthContext.jsx';
 import ProtectedRoute from './admin/components/ProtectedRoute.jsx';
@@ -51,7 +52,7 @@ export default function App() {
            <Route path="menu" element={<MenuManagement />} />
               <Route path="categories" element={<Categories />} />
               <Route path="gallery" element={<PlaceholderPage title="Gallery Management" />} />
-              <Route path="reservations" element={<PlaceholderPage title="Reservations" />} />
+          <Route path="reservations" element={<Reservations />} />
               <Route path="messages" element={<PlaceholderPage title="Messages" />} />
               <Route path="homepage" element={<PlaceholderPage title="Homepage Content" />} />
               <Route path="settings" element={<PlaceholderPage title="Website Settings" />} />
