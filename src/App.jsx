@@ -20,6 +20,8 @@ import SupabaseCheck from './admin/pages/SupabaseCheck.jsx';
 import { AuthProvider } from './admin/context/AuthContext.jsx';
 import ProtectedRoute from './admin/components/ProtectedRoute.jsx';
 
+import MenuManagement from './admin/pages/MenuManagement.jsx';
+
 import Categories from './admin/pages/Categories.jsx';
 import { ToastProvider } from './admin/components/Toast.jsx';
 
@@ -46,7 +48,7 @@ export default function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<AdminLayout />}>
               <Route path="dashboard" element={<Dashboard />} />
-              <Route path="menu" element={<PlaceholderPage title="Menu Management" />} />
+           <Route path="menu" element={<MenuManagement />} />
               <Route path="categories" element={<Categories />} />
               <Route path="gallery" element={<PlaceholderPage title="Gallery Management" />} />
               <Route path="reservations" element={<PlaceholderPage title="Reservations" />} />
