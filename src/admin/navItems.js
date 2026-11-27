@@ -5,6 +5,8 @@ import {
   Images,
   CalendarDays,
   FileText,
+    ReceiptText,
+    QrCode,
   Settings,
   UserCircle,
 } from 'lucide-react';
@@ -17,7 +19,9 @@ export const NAV_ITEMS = [
   { label: 'Categories', to: `${ADMIN_BASE}/categories`, icon: Tags },
   { label: 'Gallery Management', to: `${ADMIN_BASE}/gallery`, icon: Images },
   { label: 'Reservations', to: `${ADMIN_BASE}/reservations`, icon: CalendarDays },
- 
+  { label: 'Orders', to: `${ADMIN_BASE}/orders`, icon: ReceiptText },
+   { label: 'Tables', to: `${ADMIN_BASE}/tables`, icon: QrCode },
+     
   { label: 'Homepage Content', to: `${ADMIN_BASE}/homepage`, icon: FileText },
   { label: 'Website Settings', to: `${ADMIN_BASE}/settings`, icon: Settings },
   { label: 'Admin Profile', to: `${ADMIN_BASE}/profile`, icon: UserCircle },
