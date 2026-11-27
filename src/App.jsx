@@ -1,34 +1,35 @@
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 
 // ----- Public website -----
-import { LangProvider } from './context/LangContext.jsx';
-import { SiteProvider } from './context/SiteContext.jsx';
-import MainLayout from './layouts/MainLayout.jsx';
-import Home from './pages/Home.jsx';
-import OurStory from './pages/OurStory.jsx';
-import Menu from './pages/Menu.jsx';
-import Gallery from './pages/Gallery.jsx';
-import Reservation from './pages/Reservation.jsx';
-import Contact from './pages/Contact.jsx';
-import NotFound from './pages/NotFound.jsx';
-import TableOrder from './pages/TableOrder.jsx';
+import { LangProvider } from "./context/LangContext.jsx";
+import { SiteProvider } from "./context/SiteContext.jsx";
+import MainLayout from "./layouts/MainLayout.jsx";
+import Home from "./pages/Home.jsx";
+import OurStory from "./pages/OurStory.jsx";
+import Menu from "./pages/Menu.jsx";
+import Gallery from "./pages/Gallery.jsx";
+import Reservation from "./pages/Reservation.jsx";
+import Contact from "./pages/Contact.jsx";
+import NotFound from "./pages/NotFound.jsx";
+import TableOrder from "./pages/TableOrder.jsx";
 
 // ----- Admin -----
-import { ADMIN_BASE } from './admin/config.js';
-import { AuthProvider } from './admin/context/AuthContext.jsx';
-import { ToastProvider } from './admin/components/Toast.jsx';
-import ProtectedRoute from './admin/components/ProtectedRoute.jsx';
-import AdminLayout from './admin/layouts/AdminLayout.jsx';
-import AdminLogin from './admin/pages/AdminLogin.jsx';
-import Dashboard from './admin/pages/Dashboard.jsx';
-import MenuManagement from './admin/pages/MenuManagement.jsx';
-import Categories from './admin/pages/Categories.jsx';
-import GalleryManagement from './admin/pages/GalleryManagement.jsx';
-import Reservations from './admin/pages/Reservations.jsx';
-import Tables from './admin/pages/Tables.jsx';
-import HomepageContent from './admin/pages/HomepageContent.jsx';
-import WebsiteSettings from './admin/pages/WebsiteSettings.jsx';
-import AdminProfile from './admin/pages/AdminProfile.jsx';
+import { ADMIN_BASE } from "./admin/config.js";
+import { AuthProvider } from "./admin/context/AuthContext.jsx";
+import { ToastProvider } from "./admin/components/Toast.jsx";
+import ProtectedRoute from "./admin/components/ProtectedRoute.jsx";
+import AdminLayout from "./admin/layouts/AdminLayout.jsx";
+import AdminLogin from "./admin/pages/AdminLogin.jsx";
+import Dashboard from "./admin/pages/Dashboard.jsx";
+import MenuManagement from "./admin/pages/MenuManagement.jsx";
+import Categories from "./admin/pages/Categories.jsx";
+import GalleryManagement from "./admin/pages/GalleryManagement.jsx";
+import Reservations from "./admin/pages/Reservations.jsx";
+import Tables from "./admin/pages/Tables.jsx";
+import HomepageContent from "./admin/pages/HomepageContent.jsx";
+import WebsiteSettings from "./admin/pages/WebsiteSettings.jsx";
+import AdminProfile from "./admin/pages/AdminProfile.jsx";
+import Orders from "./admin/pages/Orders.jsx";
 
 export default function App() {
   return (
@@ -56,6 +57,7 @@ export default function App() {
                 <Route path="categories" element={<Categories />} />
                 <Route path="gallery" element={<GalleryManagement />} />
                 <Route path="reservations" element={<Reservations />} />
+                <Route path="orders" element={<Orders />} />
                 <Route path="tables" element={<Tables />} />
                 <Route path="homepage" element={<HomepageContent />} />
                 <Route path="settings" element={<WebsiteSettings />} />

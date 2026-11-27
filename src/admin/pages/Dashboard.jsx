@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   UtensilsCrossed,
@@ -8,16 +8,14 @@ import {
   Plus,
   Images,
   Settings,
-   FileText,
+  FileText,
   ArrowRight,
-  Info,
 } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
 import StatCard from '../components/StatCard.jsx';
 import StatusBadge from '../components/StatusBadge.jsx';
-import VisitorsChart from '../components/VisitorsChart.jsx';
+import ActivityChart from '../components/ActivityChart.jsx';
 import { ADMIN_BASE } from '../config.js';
-import { makeSampleSeries } from '../data/sampleDashboard.js';
 
 const QUICK_ACTIONS = [
   { label: 'Add New Dish', to: `${ADMIN_BASE}/menu`, icon: Plus },
@@ -41,29 +39,46 @@ function fmtDate(d) {
   });
 }
 
-const todayStr = () =>
-  new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().split('T')[0];
+// local मितिलाई 'YYYY-MM-DD' बनाउने
+const dateKey = (d) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+const todayStr = () => dateKey(new Date());
+
+// एउटा sitting को जम्मा रकम (cancelled बाहेक)
+const sessionAmount = (s) =>
+  s.orders
+    .filter((o) => o.status !== 'cancelled')
+    .reduce((a, o) => a + o.order_items.reduce((b, i) => b + i.unit_price * i.quantity, 0), 0);
+
+const sumSessions = (list) => list.reduce((t, s) => t + sessionAmount(s), 0);
+
+const SESSION_SELECT = 'id, closed_at, orders(status, order_items(unit_price, quantity))';
 
 export default function Dashboard() {
-  const [days, setDays] = useState(30);
-  const series = useMemo(() => makeSampleSeries(days), [days]);
-
   const [stats, setStats] = useState(null);
   const [recent, setRecent] = useState([]);
   const [error, setError] = useState('');
 
+  // graph
+  const [days, setDays] = useState(30);
+  const [metric, setMetric] = useState('sales'); // sales | reservations
+  const [chartData, setChartData] = useState(null); // { sales: [...], reservations: [...] }
+  const [chartError, setChartError] = useState('');
+
   const load = useCallback(async () => {
     setError('');
     const today = todayStr();
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
 
-    // count: 'exact', head: true = पङ्क्ति नल्याई गन्ती मात्र ल्याउने (छिटो)
     const count = (table, filter) => {
       let q = supabase.from(table).select('*', { count: 'exact', head: true });
       if (filter) q = filter(q);
       return q;
     };
 
-    const [menu, cats, total, pending, todayRes, recentRes] = await Promise.all([
+    const [menu, cats, total, pending, todayRes, recentRes, paidRes, openRes] = await Promise.all([
       count('menu_items'),
       count('categories'),
       count('reservations'),
@@ -74,9 +89,15 @@ export default function Dashboard() {
         .select('id, name, reservation_date, reservation_time, guests, status')
         .order('created_at', { ascending: false })
         .limit(5),
+      supabase
+        .from('table_sessions')
+        .select(SESSION_SELECT)
+        .not('closed_at', 'is', null)
+        .gte('closed_at', startOfDay.toISOString()),
+      supabase.from('table_sessions').select(SESSION_SELECT).is('closed_at', null),
     ]);
 
-    if ([menu, cats, total, pending, todayRes, recentRes].some((r) => r.error)) {
+    if ([menu, cats, total, pending, todayRes, recentRes, paidRes, openRes].some((r) => r.error)) {
       setError('Could not load some dashboard data.');
       return;
     }
@@ -87,6 +108,10 @@ export default function Dashboard() {
       reservations: total.count,
       pending: pending.count,
       today: todayRes.count,
+      sales: sumSessions(paidRes.data),
+      paidTables: paidRes.data.length,
+      openTotal: sumSessions(openRes.data),
+      openTables: openRes.data.length,
     });
     setRecent(recentRes.data);
   }, []);
@@ -95,7 +120,67 @@ export default function Dashboard() {
     load();
   }, [load]);
 
+  // graph को data: days बदलिँदा फेरि ल्याउने
+  useEffect(() => {
+    let active = true;
+    setChartData(null);
+    setChartError('');
+
+    const dayList = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const d = new Date();
+      d.setHours(0, 0, 0, 0);
+      d.setDate(d.getDate() - i);
+      dayList.push(d);
+    }
+    const startKey = dateKey(dayList[0]);
+    const endKey = dateKey(dayList[dayList.length - 1]);
+
+    Promise.all([
+      supabase
+        .from('reservations')
+        .select('reservation_date, status')
+        .gte('reservation_date', startKey)
+        .lte('reservation_date', endKey)
+        .neq('status', 'cancelled'),
+      supabase
+        .from('table_sessions')
+        .select(SESSION_SELECT)
+        .not('closed_at', 'is', null)
+        .gte('closed_at', dayList[0].toISOString()),
+    ]).then(([resRes, sesRes]) => {
+      if (!active) return;
+      if (resRes.error || sesRes.error) {
+        setChartError('Could not load the chart.');
+        return;
+      }
+      const resByDay = {};
+      resRes.data.forEach((r) => {
+        resByDay[r.reservation_date] = (resByDay[r.reservation_date] || 0) + 1;
+      });
+      const salesByDay = {};
+      sesRes.data.forEach((s) => {
+        const k = dateKey(new Date(s.closed_at));
+        salesByDay[k] = (salesByDay[k] || 0) + sessionAmount(s);
+      });
+
+      const lab = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      setChartData({
+        sales: dayList.map((d) => ({ label: lab(d), value: salesByDay[dateKey(d)] || 0 })),
+        reservations: dayList.map((d) => ({ label: lab(d), value: resByDay[dateKey(d)] || 0 })),
+      });
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [days]);
+
   const val = (n) => (stats ? n : '…');
+  const chartTotal = chartData ? chartData[metric].reduce((a, d) => a + d.value, 0) : 0;
+
+  const selectClass =
+    'rounded-sm border border-gold/60 bg-cream px-3 py-1.5 text-sm text-brown focus:border-gold focus:outline-none';
 
   return (
     <div className="space-y-6">
@@ -122,24 +207,53 @@ export default function Dashboard() {
 
       <section className="grid gap-6 lg:grid-cols-3">
         <div className="rounded-sm border border-gold/40 bg-white/50 p-5 shadow-card lg:col-span-2">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <h2 className="font-serif text-xl text-maroon">Website Analytics</h2>
-            <select
-              value={days}
-              onChange={(e) => setDays(Number(e.target.value))}
-              className="rounded-sm border border-gold/60 bg-cream px-3 py-1.5 text-sm text-brown focus:border-gold focus:outline-none"
-            >
-              <option value={7}>Last 7 Days</option>
-              <option value={30}>Last 30 Days</option>
-            </select>
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+            <h2 className="font-serif text-xl text-maroon">Activity</h2>
+            <div className="flex gap-2">
+              <select
+                value={metric}
+                onChange={(e) => setMetric(e.target.value)}
+                className={selectClass}
+                aria-label="Chart type"
+              >
+                <option value="sales">Sales (Rs.)</option>
+                <option value="reservations">Reservations</option>
+              </select>
+              <select
+                value={days}
+                onChange={(e) => setDays(Number(e.target.value))}
+                className={selectClass}
+                aria-label="Period"
+              >
+                <option value={7}>Last 7 Days</option>
+                <option value={30}>Last 30 Days</option>
+              </select>
+            </div>
           </div>
-          <div className="mb-3 flex items-start gap-2 rounded-sm border border-gold/60 bg-gold/20 p-2 text-xs text-brown">
-            <Info size={15} className="mt-0.5 shrink-0 text-maroon" />
-            <span>
-              <strong>Sample data:</strong> this chart is a placeholder. Real visitor tracking will be added later.
-            </span>
-          </div>
-          <VisitorsChart data={series} />
+
+          {chartError ? (
+            <p className="text-sm text-brick">{chartError}</p>
+          ) : !chartData ? (
+            <p className="py-10 text-center text-sm text-brown/70">Loading...</p>
+          ) : (
+            <>
+              <p className="mb-2 text-xs text-brown/70">
+                {metric === 'sales'
+                  ? `Total paid sales: Rs. ${chartTotal}`
+                  : `Total reservations (excluding cancelled): ${chartTotal}`}
+              </p>
+              <ActivityChart
+                data={chartData[metric]}
+                color={metric === 'sales' ? '#4A1719' : '#DDA44C'}
+                prefix={metric === 'sales' ? 'Rs. ' : ''}
+              />
+              <p className="mt-2 text-xs text-brown/60">
+                {metric === 'sales'
+                  ? 'Sales count tables closed as paid, by the day they were closed.'
+                  : 'Reservations are counted by the reservation date.'}
+              </p>
+            </>
+          )}
         </div>
 
         <div className="overflow-hidden rounded-sm border border-gold/40 bg-white/50 shadow-card">
@@ -213,16 +327,31 @@ export default function Dashboard() {
         </div>
 
         <div className="rounded-sm border border-gold/40 bg-white/50 p-5 shadow-card">
-          <h2 className="mb-4 font-serif text-xl text-maroon">Today</h2>
-          <p className="font-serif text-5xl font-semibold text-maroon">{val(stats?.today)}</p>
-          <p className="mt-1 text-sm text-brown/70">
-            reservation{stats?.today === 1 ? '' : 's'} for today (excluding cancelled)
+          <h2 className="mb-3 font-serif text-xl text-maroon">Today</h2>
+          <p className="text-xs text-brown/60">Sales (paid tables)</p>
+          <p className="font-serif text-4xl font-semibold text-maroon">
+            {stats ? `Rs. ${stats.sales}` : '…'}
           </p>
+          <p className="text-xs text-brown/60">{stats ? `${stats.paidTables} table(s) closed` : ''}</p>
+
+          <div className="mt-4 grid grid-cols-2 gap-3 border-t border-gold/30 pt-3 text-sm">
+            <div>
+              <p className="text-xs text-brown/60">Open tables</p>
+              <p className="font-medium text-brown">
+                {stats ? `${stats.openTables} · Rs. ${stats.openTotal}` : '…'}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs text-brown/60">Reservations</p>
+              <p className="font-medium text-brown">{val(stats?.today)}</p>
+            </div>
+          </div>
+
           <Link
-            to={`${ADMIN_BASE}/reservations`}
+            to={`${ADMIN_BASE}/orders`}
             className="mt-4 inline-flex items-center gap-1 text-sm text-maroon hover:text-brick"
           >
-            Manage reservations <ArrowRight size={16} />
+            View orders <ArrowRight size={16} />
           </Link>
         </div>
       </section>
