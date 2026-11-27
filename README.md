@@ -193,7 +193,7 @@ Deployed on **Vercel**.
 
 📍 Sindhupalchok, Nepal
 
-<a href="https://github.com/ngema-theeng"><img src="https://img.shields.io/badge/GitHub-ngema--theeng-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
+<a href="https://github.com/Ngema7"><img src="https://img.shields.io/badge/GitHub-ngema--theeng-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
 <a href="https://ngemauniverse.vercel.app"><img src="https://img.shields.io/badge/Portfolio-NGEMA_UNIVERSE-D4A44C?style=for-the-badge&logo=vercel&logoColor=black" /></a>
 <a href="#"><img src="https://img.shields.io/badge/LinkedIn-Ngema_Theeng-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" /></a>
 <a href="#"><img src="https://img.shields.io/badge/Instagram-@ngema__exe-E4405F?style=for-the-badge&logo=instagram&logoColor=white" /></a>
