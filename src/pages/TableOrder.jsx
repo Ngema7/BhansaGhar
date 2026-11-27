@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Minus, Plus, ShoppingBag, X, Receipt, CheckCircle2, AlertCircle, RefreshCw, Globe, Star, Phone, MapPin } from 'lucide-react';
+import { Minus, Plus, ShoppingBag, X, Receipt, CheckCircle2, AlertCircle, RefreshCw, ExternalLink, Star, Phone, MapPin, Clock, MessageCircle, Facebook, Instagram, ChevronUp } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient.js';
 import { useMenu } from '../hooks/useMenu.js';
 import SmartImage from '../components/SmartImage.jsx';
@@ -107,22 +107,27 @@ export default function TableOrder() {
     setView('bill');
   }
 
-  const header = (
+    const header = (
     <header className="sticky top-0 z-30 bg-maroon shadow-[0_2px_0_0_rgba(221,164,76,.45)]">
-      <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-        <div>
-          <p className="font-serif text-xl tracking-wide text-gold">BHANSA GHAR</p>
-          <p className="text-[10px] uppercase tracking-[0.25em] text-cream/70">Authentic Nepali Cuisine</p>
+      <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3">
+        <div className="min-w-0">
+          <p className="truncate font-serif text-xl tracking-wide text-gold">BHANSA GHAR</p>
+          <p className="truncate text-[10px] uppercase tracking-[0.25em] text-cream/70">Authentic Nepali Cuisine</p>
         </div>
-        <div className="flex items-center gap-3">
-          <a href="/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-cream/90 hover:text-gold">
-            <Globe size={14} /> <span className="hidden min-[380px]:inline">Website</span>
+        <div className="flex shrink-0 items-center gap-3">
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full border border-gold/60 px-3 py-1.5 text-xs text-gold transition-colors hover:bg-gold hover:text-maroon"
+          >
+            <ExternalLink size={13} /> View Website
           </a>
           {table && !table.error && (
-            <div className="text-right">
-              <p className="font-serif text-lg leading-tight text-cream">{table.name}</p>
-              <p className={`text-[11px] ${table.is_open ? 'text-green-300' : 'text-cream/60'}`}>
-                {table.is_open ? '● Open' : '○ Not open'}
+            <div className="rounded-sm bg-gold px-3 py-1 text-center">
+              <p className="text-[9px] uppercase leading-none tracking-wider text-maroon/70">Table</p>
+              <p className="font-serif text-base font-semibold leading-tight text-maroon">
+                {table.name.replace(/^table\s*/i, '')}
               </p>
             </div>
           )}
@@ -301,19 +306,91 @@ export default function TableOrder() {
           </div>
         )}
       </main>
-            <footer className="mx-auto mt-8 max-w-3xl px-4 text-center text-xs text-brown/70">
-        {site.googleReviewUrl && (
-          <a href={site.googleReviewUrl} target="_blank" rel="noopener noreferrer"
-            className="mb-3 inline-flex items-center gap-2 rounded-sm border border-gold bg-gold/20 px-4 py-2 text-sm font-medium text-maroon hover:bg-gold/40">
-            <Star size={16} className="fill-gold text-gold" /> Rate us on Google
-          </a>
-        )}
-        <div className="space-y-1">
-          {site.address && <p className="flex items-center justify-center gap-1"><MapPin size={12} /> {site.address}</p>}
-          {site.phone && <p className="flex items-center justify-center gap-1"><Phone size={12} /> <a href={`tel:${site.phone}`}>{site.phone}</a></p>}
-          {site.hours && <p>{site.hours}</p>}
+          <footer className="mt-10 bg-maroon text-cream">
+        <div className="mx-auto max-w-3xl px-4 py-8">
+          <div className="text-center">
+            <p className="font-serif text-2xl tracking-wide text-gold">BHANSA GHAR</p>
+            <p className="mt-1 text-xs text-cream/70">{site.tagline || 'Taste Nepal. Feel at Home.'}</p>
+            <div className="gold-line mt-4"><span /></div>
+          </div>
+
+          {site.googleReviewUrl && (
+            <a
+              href={site.googleReviewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mx-auto mt-5 flex w-fit items-center gap-2 rounded-sm bg-gold px-5 py-2.5 text-sm font-medium text-maroon shadow-card transition-transform hover:scale-105 active:scale-95"
+            >
+              <span className="flex">
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <Star key={i} size={14} className="fill-maroon text-maroon" />
+                ))}
+              </span>
+              Rate us on Google
+            </a>
+          )}
+
+          <ul className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
+            {site.phone && (
+              <li>
+                <a href={`tel:${site.phone}`} className="flex items-center gap-3 rounded-sm border border-gold/30 p-3 transition-colors hover:border-gold hover:bg-white/5">
+                  <Phone size={18} className="shrink-0 text-gold" />
+                  <span><span className="block text-[11px] text-cream/60">Call us</span>{site.phone}</span>
+                </a>
+              </li>
+            )}
+            {site.whatsapp && (
+              <li>
+                <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-sm border border-gold/30 p-3 transition-colors hover:border-gold hover:bg-white/5">
+                  <MessageCircle size={18} className="shrink-0 text-gold" />
+                  <span><span className="block text-[11px] text-cream/60">WhatsApp</span>Chat with us</span>
+                </a>
+              </li>
+            )}
+            {site.address && (
+              <li>
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.address)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 rounded-sm border border-gold/30 p-3 transition-colors hover:border-gold hover:bg-white/5"
+                >
+                  <MapPin size={18} className="shrink-0 text-gold" />
+                  <span><span className="block text-[11px] text-cream/60">Find us</span>{site.address}</span>
+                </a>
+              </li>
+            )}
+            {site.hours && (
+              <li className="flex items-center gap-3 rounded-sm border border-gold/30 p-3">
+                <Clock size={18} className="shrink-0 text-gold" />
+                <span><span className="block text-[11px] text-cream/60">Opening hours</span>{site.hours}</span>
+              </li>
+            )}
+          </ul>
+
+          {(site.social?.facebook || site.social?.instagram) && (
+            <div className="mt-6 flex justify-center gap-3">
+              {site.social.facebook && (
+                <a href={site.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook"
+                  className="rounded-full border border-gold/60 p-2.5 text-gold transition-colors hover:bg-gold hover:text-maroon"><Facebook size={18} /></a>
+              )}
+              {site.social.instagram && (
+                <a href={site.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"
+                  className="rounded-full border border-gold/60 p-2.5 text-gold transition-colors hover:bg-gold hover:text-maroon"><Instagram size={18} /></a>
+              )}
+            </div>
+          )}
+
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="mx-auto mt-6 flex items-center gap-1 text-xs text-cream/70 hover:text-gold"
+          >
+            <ChevronUp size={14} /> Back to top
+          </button>
+
+          <p className="mt-4 text-center text-[11px] text-cream/50">© {new Date().getFullYear()} Bhansa Ghar. All rights reserved.</p>
+          
         </div>
-        <p className="mt-3">© {new Date().getFullYear()} Bhansa Ghar</p>
       </footer>
 
       {/* तल अडिने cart पट्टी */}
