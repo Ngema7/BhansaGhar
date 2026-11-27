@@ -17,6 +17,7 @@ function fromRow(r) {
     mapEmbedUrl: r.map_embed_url,
     menuPdfUrl: fallback.menuPdfUrl,
     social: { facebook: r.facebook, instagram: r.instagram, youtube: r.youtube },
+        googleReviewUrl: r.google_review_url || '',
   };
 }
 

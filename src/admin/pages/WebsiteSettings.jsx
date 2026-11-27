@@ -171,6 +171,10 @@ export default function WebsiteSettings() {
             <Field id="facebook" label="Facebook" error={errors.facebook}>{text('facebook', { placeholder: 'https://facebook.com/...' })}</Field>
             <Field id="instagram" label="Instagram" error={errors.instagram}>{text('instagram', { placeholder: 'https://instagram.com/...' })}</Field>
             <Field id="youtube" label="YouTube" error={errors.youtube}>{text('youtube', { placeholder: 'https://youtube.com/...' })}</Field>
+                        <Field id="google_review_url" label="Google review link" error={errors.google_review_url}
+              hint="Google Maps → your restaurant → Share / Get more reviews → copy link. Leave empty to hide the button.">
+              {text('google_review_url', { placeholder: 'https://g.page/r/...' })}
+            </Field>
           </section>
 
           <div className="flex justify-end">
